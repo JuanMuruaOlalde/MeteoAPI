@@ -1,0 +1,37 @@
+html {
+    font-family: sans-serif;
+}
+
+header {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: underline;
+}
+
+main {
+    border: 1px solid;
+    padding: 0 20px;
+    grid-template-columns: 80% 20%;
+}
+
+.enmarcado_dentro_de_una_caja {
+    display: inline-block;
+    padding: 1em;
+    background-color: whitesmoke;
+    border: 1px solid grey;
+    border-radius: 2px;
+    box-shadow: 2px 2px green;
+}
+
+input[type="submit"],
+input[type="button"],
+button[type="submit"] {
+    margin: 1em;
+    padding: 0.5em;
+    background-color: oldlace;
+}
+
+.contenedor_de_una_respuesta {
+    width: 100%;
+}
