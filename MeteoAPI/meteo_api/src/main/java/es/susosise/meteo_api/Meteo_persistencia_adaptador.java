@@ -8,6 +8,15 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class Meteo_persistencia_adaptador {
+
+    @Autowired
+    MisPropiedades mispropiedades;
+
+    public ParteMetereologico_entidad_modelo ObtenerDatosMetereologicos(String poblacion, String codigoPais) {
+        System.out.println(mispropiedades.getWeatherAPIkey());
+        return new ParteMetereologico_entidad_modelo();
+        //_TODO_pendiente de implementar esta funcion.
+    }
     
     @Autowired
     Meteo_persistencia_infraestructura persistencia;
