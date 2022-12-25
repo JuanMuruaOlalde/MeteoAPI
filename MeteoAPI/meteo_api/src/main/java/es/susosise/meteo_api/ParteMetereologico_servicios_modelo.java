@@ -7,21 +7,27 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
-public class Meteo_persistencia_adaptador {
+public class ParteMetereologico_servicios_modelo {
 
     @Autowired
     MisPropiedades mispropiedades;
 
-    public ParteMetereologico_entidad_modelo ObtenerDatosMetereologicos(String poblacion, String codigoPais) {
-        System.out.println(mispropiedades.getWeatherAPIkey());
-        return new ParteMetereologico_entidad_modelo();
+    public ParteMetereologico_dto_adaptador ObtenerDatosMetereologicos(String poblacion, String codigoPais) {
         //_TODO_pendiente de implementar esta funcion.
+        //se ha puesto esto provisional, con datos fijos, para tener algo que mostrar.
+        ParteMetereologico_dto_adaptador parte = new ParteMetereologico_dto_adaptador();
+        parte.temperatura_celsius = 5.0;
+        parte.humedad_porcentual = 5.0;
+        parte.velocidadDelViento_ms = 5.0;
+        parte.orientacionDelViento_grados = 5;
+
+        return parte;
     }
     
     @Autowired
-    Meteo_persistencia_infraestructura persistencia;
+    ParteMetereologico_persistencia_adaptador persistencia;
 
-    public Meteo_persistencia_adaptador(Meteo_persistencia_infraestructura persistencia) {
+    public ParteMetereologico_servicios_modelo(ParteMetereologico_persistencia_adaptador persistencia) {
         this.persistencia = persistencia;
     }
     

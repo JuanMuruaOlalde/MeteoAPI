@@ -6,7 +6,6 @@ import jakarta.persistence.Id;
 
 import java.util.Date;
 
-import jakarta.persistence.Column;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 
@@ -15,29 +14,36 @@ import jakarta.persistence.GenerationType;
 public class ParteMetereologico_entidad_modelo {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name="parte_id")
     private Long idInterno;
 
     String poblacion;
+    String codigoPais;
     Date fecha;
     Double temperatura_celsius;
     Double humedad_porcentual;
+    Double vientoVelocidad_ms;
+    Integer vientoOrientacion_grados;
 
     public ParteMetereologico_entidad_modelo() {
-        fecha =  new Date();
+        poblacion = "noPoblacion";
+        codigoPais = "";
+        fecha = new Date();
         temperatura_celsius = Double.NaN;
         humedad_porcentual = Double.NaN;
+        vientoVelocidad_ms = Double.NaN;
+        vientoOrientacion_grados = 0;
     }
 
-
-    public ParteMetereologico_entidad_modelo(Long idInterno, String poblacion, Date fecha, Double temperatura_celsius, Double humedad_porcentual) {
+    public ParteMetereologico_entidad_modelo(Long idInterno, String poblacion, String codigoPais, Date fecha, Double temperatura_celsius, Double humedad_porcentual, Double velocidadDelViento_ms, Integer orientacionDelViento_grados) {
         this.idInterno = idInterno;
         this.poblacion = poblacion;
+        this.codigoPais = codigoPais;
         this.fecha = fecha;
         this.temperatura_celsius = temperatura_celsius;
         this.humedad_porcentual = humedad_porcentual;
+        this.vientoVelocidad_ms = velocidadDelViento_ms;
+        this.vientoOrientacion_grados = orientacionDelViento_grados;
     }
-
 
     public Long getIdInterno() {
         return this.idInterno;
@@ -53,6 +59,14 @@ public class ParteMetereologico_entidad_modelo {
 
     public void setPoblacion(String poblacion) {
         this.poblacion = poblacion;
+    }
+
+    public String getCodigoPais() {
+        return this.codigoPais;
+    }
+
+    public void setCodigoPais(String codigoPais) {
+        this.codigoPais = codigoPais;
     }
 
     public Date getFecha() {
@@ -77,6 +91,22 @@ public class ParteMetereologico_entidad_modelo {
 
     public void setHumedad_porcentual(Double humedad_porcentual) {
         this.humedad_porcentual = humedad_porcentual;
+    }
+
+    public Double getVientoVelocidad_ms() {
+        return this.vientoVelocidad_ms;
+    }
+
+    public void setVientoVelocidad_ms(Double velocidadDelViento_ms) {
+        this.vientoVelocidad_ms = velocidadDelViento_ms;
+    }
+
+    public Integer getVientoOrientacion_grados() {
+        return this.vientoOrientacion_grados;
+    }
+
+    public void setOrientacionDelViento_grados(Integer orientacionDelViento_grados) {
+        this.vientoOrientacion_grados = orientacionDelViento_grados;
     }
 
 }
