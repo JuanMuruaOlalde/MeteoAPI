@@ -22,7 +22,7 @@ function ObtenerCoordenadasYMetereologia() {
         })
         .then((jsonData) => {
             const timestamp = new Date(Date.now());
-            console.log(timestamp.toISOString(), "Consulta metereologica, con resultado: ", JSON.stringify(jsonData));
+            console.log(timestamp.toISOString(), "Consulta metereologica para [" + poblacion + " , " + codigoPais + "], con resultado: ", JSON.stringify(jsonData));
             //_TODO_pendiente recuperarlos datos reales.
             const temperaturaActual = jsonData["temperatura_celsius"];
             const humedadActual = jsonData["temperatura_celsius"];

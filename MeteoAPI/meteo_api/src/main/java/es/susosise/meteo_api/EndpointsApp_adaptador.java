@@ -7,12 +7,12 @@ import org.springframework.ui.Model;
 
 
 @Controller
-public class EndpointsAplicacion_adaptador {
+public class EndpointsApp_adaptador {
 
 
     @GetMapping("/")
     public String MostrarLaPaginaInicial(Model model) {
-        return "meteo_GUI_infraestructura";
+        return "InterfazUsuarioGUI_infraestructura";
     }
     
     
