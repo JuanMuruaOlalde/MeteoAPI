@@ -1,12 +1,20 @@
 function ObtenerCoordenadasYMetereologia() {
   const poblacion = document.getElementById("poblacion").value;
   const codigoPais = document.getElementById("codigoPais").value;
-
-  fetch("http://localhost:8080/meteo", {
+  const datos = {
+    "poblacion": poblacion,
+    "codigoPais": codigoPais
+  };
+  const url = new URL("http://localhost:8080/meteo");
+  for (let dato in datos) {
+    url.searchParams.append(dato, datos[dato]);
+  }
+  fetch(url, {
     method: "GET",
     headers: {
       Accept: "application/json",
     },
+    //body: JSON.stringify({"poblacion": poblacion, "codigoPais": codigoPais})
   })
     .then((response) => {
       if (!response.ok) {
@@ -30,11 +38,11 @@ function ObtenerCoordenadasYMetereologia() {
           "], con resultado: ",
         JSON.stringify(jsonData)
       );
-      //_TODO_pendiente recuperarlos datos reales.
       const temperaturaActual = jsonData["temperatura_celsius"];
-      const humedadActual = jsonData["temperatura_celsius"];
-      const vientoVelocidad = jsonData["temperatura_celsius"];
-      const vientoDireccion = jsonData["temperatura_celsius"];
+      const humedadActual = jsonData["humedad_porcentual"];
+      const vientoVelocidad = jsonData["velocidadDelViento_ms"];
+      const vientoDireccion = jsonData["orientacionDelViento_grados"];
+
       document.getElementById("contenedorRespuestaAPI").innerHTML =
         "<p> Temperatura: " +
         temperaturaActual +
