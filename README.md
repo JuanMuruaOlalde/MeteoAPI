@@ -19,6 +19,7 @@ Una mini aplicación "web", con Spring Boot.
 
 ### Hotel
 
-Una aplicación "desktop", con JavaFX.
+Una aplicación "desktop", con JavaFX.\
+(nota: Está incabada, es un trabajo en curso..., que lo voy avanzando según puedo...)
 
 (https://github.com/JuanMuruaOlalde/Hotel)
