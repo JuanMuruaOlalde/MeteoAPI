@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <meta charset="utf-8" />
+    <title>Meteo_API</title>
+    <meta
+      name="description"
+      content="Un simple interfaz gráfico de usuario para consultar datos metereológicos."
+    />
+    <meta name="author" content="Juan Murua Olalde" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="style.css" />
+  </head>
+
+  <body>
+    <header>
+      <h1>Consulta de datos metereológicos</h1>
+    </header>
+
+    <main>
+      <p>Este es un frontend para utilizar un par de servicios:</p>
+      <ul>
+        <li>
+          <a href="https://openweathermap.org/api/geocoding-api" target="_blank"
+            >https://openweathermap.org/api/geocoding-api</a
+          >
+        </li>
+        <li>
+          <a href="https://openweathermap.org/current" target="_blank"
+            >https://openweathermap.org/current</a
+          >
+        </li>
+      </ul>
+      <form
+        name="formularioDeGeolocalizacionYMetereologia"
+        th:action="@{/PaginaCompleta}"
+        th:object="${poblacionAConsultar}"
+        method="post"
+        class="enmarcado_dentro_de_una_caja"
+      >
+        <p>
+          <label for="poblacion:"> Población: </label>
+          <input type="text" th:field="*{poblacion}" required />
+        </p>
+        <p>
+          <label for="codigoPais">Código de pais: </label>
+          <input
+            type="text"
+            th:field="*{codigoPais}"
+            pattern="[a-zA-Z][a-zA-Z]"
+            size="2"
+            required
+          />
+          (2 letras) <br />
+          <a
+            href="https://es.wikipedia.org/wiki/ISO_3166-1#C%C3%B3digos_oficialmente_asignados"
+            target="_blank"
+            >(consultar los códigos oficiales)</a
+          >
+        </p>
+        <p>
+          <input type="submit" value="Obtener coordenadas y metereologia" />
+        </p>
+      </form>
+      <div th:inline="text">
+        <p>Temperatura: [[${temperatura_celsius}]] °C</p>
+        <p>Humedad: [[${humedad_porcentual}]] %</p>
+        <p>
+          Viento: [[${velocidadDelViento_ms}]] m/s , soplando desde
+          [[${orientacionDelViento_grados}]] °
+        </p>
+      </div>
+    </main>
+
+    <hr />
+    <nav>
+      <a href="/ultimasConsultas-conPaginaCompleta"
+        >Historico de últimas consultas</a
+      >
+    </nav>
+  </body>
+</html>
