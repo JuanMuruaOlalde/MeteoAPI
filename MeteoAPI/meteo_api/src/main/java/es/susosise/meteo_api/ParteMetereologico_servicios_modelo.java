@@ -30,34 +30,43 @@ public class ParteMetereologico_servicios_modelo {
         this.persistencia = persistencia;
     }
 
-    public ParteMetereologico_dto_adaptador ObtenerDatosMetereologicos(String poblacion, String codigoPais) throws IOException, JSONException {
+    public ParteMetereologico_dto_adaptador ObtenerDatosMetereologicos(String poblacion, String codigoPais)
+            throws IOException, JSONException {
         Coordenadas_dto_adaptador coordenadas = getGeolocalizacion(poblacion, codigoPais);
         if (coordenadas != null) {
             ParteMetereologico_dto_adaptador parteMetereologico = getMetereologia(coordenadas);
             parteMetereologico.setFecha(new Date());
             parteMetereologico.setUbicacion(poblacion + " , " + codigoPais);
+            ParteMetereologico_entidad_modelo paraGuardar = new ParteMetereologico_entidad_modelo();
+            paraGuardar.setPoblacion(poblacion);
+            paraGuardar.setCodigoPais(codigoPais);
+            paraGuardar.setTemperatura_celsius(parteMetereologico.getTemperatura_celsius());
+            paraGuardar.setHumedad_porcentual(parteMetereologico.getHumedad_porcentual());
+            paraGuardar.setVientoVelocidad_ms(parteMetereologico.getVelocidadDelViento_ms());
+            paraGuardar.setVientoOrientacion_grados(parteMetereologico.getOrientacionDelViento_grados());
+            guardar(paraGuardar);
             return parteMetereologico;
         }
         return null;
     }
-    
+
     public ArrayList<ParteMetereologico_entidad_modelo> getLos10Ultimos() {
-        ArrayList<ParteMetereologico_entidad_modelo> partes = (ArrayList<ParteMetereologico_entidad_modelo>) persistencia.findTop10ByOrderByFechaDesc();
+        ArrayList<ParteMetereologico_entidad_modelo> partes = (ArrayList<ParteMetereologico_entidad_modelo>) persistencia
+                .findTop10ByOrderByFechaDesc();
         if (partes.size() == 0) {
             partes = ParteMetereologico_entidad_modelo.getPartesParaPruebas();
         }
         return partes;
     }
-    
+
     public Long getCuantosHayAlmacenados() {
         return persistencia.count();
     }
-    
+
     public List<ParteMetereologico_entidad_modelo> getTodas() {
         return persistencia.findAll();
     }
-    
-   
+
     public Object buscarPorIdentificador(Long idInterno) {
         Optional<ParteMetereologico_entidad_modelo> parteMeteorologico = persistencia.findById(idInterno);
         if (parteMeteorologico.isPresent()) {
@@ -66,22 +75,22 @@ public class ParteMetereologico_servicios_modelo {
             return new ParteMetereologico_entidad_modelo();
         }
     }
-    
+
     public void guardar(ParteMetereologico_entidad_modelo parteMeteorologico) {
-            persistencia.save(parteMeteorologico);
+        persistencia.save(parteMeteorologico);
     }
-    
+
     public void eliminar(ParteMetereologico_entidad_modelo parteMeteorologico) {
         persistencia.delete(parteMeteorologico);
     }
 
-    
-    private Coordenadas_dto_adaptador getGeolocalizacion(String poblacion, String codigoPais) throws IOException, JSONException {
-        //nota: Utiliza un servicio de OpenWeather
+    private Coordenadas_dto_adaptador getGeolocalizacion(String poblacion, String codigoPais)
+            throws IOException, JSONException {
+        // nota: Utiliza un servicio de OpenWeather
         // https://openweathermap.org/api/geocoding-api
-        URL urlGeolocalizacion = new URL("http://api.openweathermap.org/geo/1.0/direct" 
-        + "?q=" + poblacion + "," + codigoPais 
-        + "&appid=" + mispropiedades.getWeatherAPIkey());
+        URL urlGeolocalizacion = new URL("http://api.openweathermap.org/geo/1.0/direct"
+                + "?q=" + poblacion + "," + codigoPais
+                + "&appid=" + mispropiedades.getWeatherAPIkey());
         String datosTexto = llamarALaApiYObtenerRespuesta(urlGeolocalizacion);
         JSONArray datos = (JSONArray) new JSONTokener(datosTexto).nextValue();
         JSONObject datosJson = datos.getJSONObject(0);
@@ -90,17 +99,18 @@ public class ParteMetereologico_servicios_modelo {
         return new Coordenadas_dto_adaptador(latitud, longitud);
     }
 
-    private ParteMetereologico_dto_adaptador getMetereologia(Coordenadas_dto_adaptador coordenadas) throws IOException, JSONException{
-        //nota: Utiliza un servicio de OpenWeather
+    private ParteMetereologico_dto_adaptador getMetereologia(Coordenadas_dto_adaptador coordenadas)
+            throws IOException, JSONException {
+        // nota: Utiliza un servicio de OpenWeather
         // https://openweathermap.org/current
         URL urlMetereologia = new URL("https://api.openweathermap.org/data/2.5/weather"
-        + "?lat=" + coordenadas.getLatitud() 
-        + "&lon=" + coordenadas.getLongitud ()
-        + "&units=metric"
-        + "&lang=es"
-        + "&appid=" + mispropiedades.getWeatherAPIkey());
+                + "?lat=" + coordenadas.getLatitud()
+                + "&lon=" + coordenadas.getLongitud()
+                + "&units=metric"
+                + "&lang=es"
+                + "&appid=" + mispropiedades.getWeatherAPIkey());
         String datosTexto = llamarALaApiYObtenerRespuesta(urlMetereologia);
-        //JSONArray datos = (JSONArray) new JSONTokener(datosTexto).nextValue();
+        // JSONArray datos = (JSONArray) new JSONTokener(datosTexto).nextValue();
         JSONObject datosJson = (JSONObject) new JSONTokener(datosTexto).nextValue();
         Double temperaturaActual = datosJson.getJSONObject("main").getDouble("temp");
         Double humedadActual = datosJson.getJSONObject("main").getDouble("humidity");
@@ -108,35 +118,34 @@ public class ParteMetereologico_servicios_modelo {
         Integer vientoDireccion = datosJson.getJSONObject("wind").getInt("deg");
         return new ParteMetereologico_dto_adaptador(temperaturaActual, humedadActual, vientoVelocidad, vientoDireccion);
     }
-    
+
     private String llamarALaApiYObtenerRespuesta(URL url) throws IOException {
-            HttpURLConnection conexion = (HttpURLConnection) url.openConnection();
-            conexion.setRequestMethod("GET");
-            conexion.setConnectTimeout(3000);
-            conexion.setReadTimeout(3000);
-            int respuestaGCodigo = conexion.getResponseCode();
-            if (respuestaGCodigo != HttpURLConnection.HTTP_OK) {
-                BufferedReader receptor = new BufferedReader(new InputStreamReader(conexion.getErrorStream()));
-                String unaLinea;
-                StringBuffer respuestaError = new StringBuffer();
-                while((unaLinea = receptor.readLine()) != null) {
-                    respuestaError.append(unaLinea);
-                }
-                receptor.close();
-                conexion.disconnect();
-                return respuestaError.toString();
-            }else {
-                BufferedReader receptor = new BufferedReader(new InputStreamReader(conexion.getInputStream()));
-                String unaLinea;
-                StringBuffer respuestaOk = new StringBuffer();
-                while((unaLinea = receptor.readLine()) != null) {
-                    respuestaOk.append(unaLinea);
-                }
-                receptor.close();
-                conexion.disconnect();
-                return respuestaOk.toString();
+        HttpURLConnection conexion = (HttpURLConnection) url.openConnection();
+        conexion.setRequestMethod("GET");
+        conexion.setConnectTimeout(3000);
+        conexion.setReadTimeout(3000);
+        int respuestaGCodigo = conexion.getResponseCode();
+        if (respuestaGCodigo != HttpURLConnection.HTTP_OK) {
+            BufferedReader receptor = new BufferedReader(new InputStreamReader(conexion.getErrorStream()));
+            String unaLinea;
+            StringBuffer respuestaError = new StringBuffer();
+            while ((unaLinea = receptor.readLine()) != null) {
+                respuestaError.append(unaLinea);
             }
+            receptor.close();
+            conexion.disconnect();
+            return respuestaError.toString();
+        } else {
+            BufferedReader receptor = new BufferedReader(new InputStreamReader(conexion.getInputStream()));
+            String unaLinea;
+            StringBuffer respuestaOk = new StringBuffer();
+            while ((unaLinea = receptor.readLine()) != null) {
+                respuestaOk.append(unaLinea);
+            }
+            receptor.close();
+            conexion.disconnect();
+            return respuestaOk.toString();
+        }
     }
 
- 
 }

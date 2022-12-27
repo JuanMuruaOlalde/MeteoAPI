@@ -11,7 +11,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 
 @Entity
-@Table(name="partes_metereologicos")
+@Table(name = "partes_metereologicos")
 public class ParteMetereologico_entidad_modelo {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -35,11 +35,11 @@ public class ParteMetereologico_entidad_modelo {
         vientoOrientacion_grados = 0;
     }
 
-    public ParteMetereologico_entidad_modelo(Long idInterno, 
-      String poblacion, String codigoPais, 
-      Date fecha, 
-      Double temperatura_celsius, Double humedad_porcentual, 
-      Double velocidadDelViento_ms, Integer orientacionDelViento_grados) {
+    public ParteMetereologico_entidad_modelo(Long idInterno,
+            String poblacion, String codigoPais,
+            Date fecha,
+            Double temperatura_celsius, Double humedad_porcentual,
+            Double velocidadDelViento_ms, Integer vientoOrientacion_grados) {
         this.idInterno = idInterno;
         this.poblacion = poblacion;
         this.codigoPais = codigoPais;
@@ -47,7 +47,7 @@ public class ParteMetereologico_entidad_modelo {
         this.temperatura_celsius = temperatura_celsius;
         this.humedad_porcentual = humedad_porcentual;
         this.vientoVelocidad_ms = velocidadDelViento_ms;
-        this.vientoOrientacion_grados = orientacionDelViento_grados;
+        this.vientoOrientacion_grados = vientoOrientacion_grados;
     }
 
     public Long getIdInterno() {
@@ -110,19 +110,23 @@ public class ParteMetereologico_entidad_modelo {
         return this.vientoOrientacion_grados;
     }
 
-    public void setOrientacionDelViento_grados(Integer orientacionDelViento_grados) {
-        this.vientoOrientacion_grados = orientacionDelViento_grados;
+    public void setVientoOrientacion_grados(Integer vientoOrientacion_grados) {
+        this.vientoOrientacion_grados = vientoOrientacion_grados;
     }
 
     public static ArrayList<ParteMetereologico_entidad_modelo> getPartesParaPruebas() {
         ArrayList<ParteMetereologico_entidad_modelo> partes = new ArrayList<>();
-        ParteMetereologico_entidad_modelo parte01 = new ParteMetereologico_entidad_modelo(1L, "Bilbao", "ES", new Date(), 18.3, 46.2, 3.9, 333);
+        ParteMetereologico_entidad_modelo parte01 = new ParteMetereologico_entidad_modelo(1L, "Bilbao", "ES",
+                new Date(), 18.3, 46.2, 3.9, 333);
         partes.add(parte01);
-        ParteMetereologico_entidad_modelo parte02 = new ParteMetereologico_entidad_modelo(2L, "Santander", "ES", new Date(), 19.7, 45.2, 2.5, 333);
+        ParteMetereologico_entidad_modelo parte02 = new ParteMetereologico_entidad_modelo(2L, "Santander", "ES",
+                new Date(), 19.7, 45.2, 2.5, 333);
         partes.add(parte02);
-        ParteMetereologico_entidad_modelo parte03 = new ParteMetereologico_entidad_modelo(3L, "Albacete", "ES", new Date(), 27.3, 21.8, 1.3, 125);
+        ParteMetereologico_entidad_modelo parte03 = new ParteMetereologico_entidad_modelo(3L, "Albacete", "ES",
+                new Date(), 27.3, 21.8, 1.3, 125);
         partes.add(parte03);
-        ParteMetereologico_entidad_modelo parte04 = new ParteMetereologico_entidad_modelo(4L, "Sevilla", "ES", new Date(), 31.7, 32.2, 2.5, 78);
+        ParteMetereologico_entidad_modelo parte04 = new ParteMetereologico_entidad_modelo(4L, "Sevilla", "ES",
+                new Date(), 31.7, 32.2, 2.5, 78);
         partes.add(parte04);
 
         return partes;

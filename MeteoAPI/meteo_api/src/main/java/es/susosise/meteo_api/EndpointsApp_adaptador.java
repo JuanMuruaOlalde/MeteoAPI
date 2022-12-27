@@ -9,7 +9,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.servlet.ModelAndView;
 import org.springframework.ui.Model;
 
 @Controller
@@ -30,7 +29,7 @@ public class EndpointsApp_adaptador {
 
     @GetMapping("/PaginaCompleta")
     public String MostrarPaginaInicial(Model model) {
-        Poblacion_dto_adaptador unaPoblacion = new Poblacion_dto_adaptador("", "ES");
+        Poblacion_dto_adaptador unaPoblacion = new Poblacion_dto_adaptador("", "es");
         model.addAttribute("poblacionAConsultar", unaPoblacion);
         return "InterfazUsuarioGUI_conPaginaCompleta_infraestructura";
     }
