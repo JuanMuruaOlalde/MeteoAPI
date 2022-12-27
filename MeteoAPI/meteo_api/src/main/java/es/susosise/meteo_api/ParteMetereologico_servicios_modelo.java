@@ -6,6 +6,7 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -32,11 +33,12 @@ public class ParteMetereologico_servicios_modelo {
     public ParteMetereologico_dto_adaptador ObtenerDatosMetereologicos(String poblacion, String codigoPais) throws IOException, JSONException {
         Coordenadas_dto_adaptador coordenadas = getGeolocalizacion(poblacion, codigoPais);
         if (coordenadas != null) {
-            ParteMetereologico_dto_adaptador metereologia = getMetereologia(coordenadas);
-            return metereologia;
+            ParteMetereologico_dto_adaptador parteMetereologico = getMetereologia(coordenadas);
+            parteMetereologico.setFecha(new Date());
+            parteMetereologico.setUbicacion(poblacion + " , " + codigoPais);
+            return parteMetereologico;
         }
         return null;
-        //return getMetereologia(getGeolocalizacion(poblacion, codigoPais));
     }
     
     public ArrayList<ParteMetereologico_entidad_modelo> getLos10Ultimos() {

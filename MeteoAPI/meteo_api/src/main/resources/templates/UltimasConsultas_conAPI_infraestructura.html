@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <meta charset="utf-8" />
+    <title>Historico -con API-</title>
+    <meta
+      name="description"
+      content="Los últimos partes metereologicos. Histórico de consultas realizadas."
+    />
+    <meta name="author" content="Juan Murua Olalde" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="style.css" />
+  </head>
+
+  <body>
+    <header>
+      <h1>Histórico de consultas realizadas</h1>
+    </header>
+
+    <main>
+      <p>Se muestran hasta los 10 últimos registros.</p>
+      <table>
+        <thead>
+          <tr>
+            <td>Ubicacion</td>
+            <td>Fecha</td>
+            <td>Temperatura</td>
+            <td>Humedad</td>
+            <td>viento</td>
+            <td>soplando hacia</td>
+          </tr>
+        </thead>
+        <tbody id="cuerpoDeLaTabla"></tbody>
+      </table>
+    </main>
+  </body>
+
+  <footer>
+    <p>
+      Esta es la versión en la que el cliente pide al servidor los datos en
+      bruto y luego los muestra él mismo.
+    </p>
+  </footer>
+
+  <script src="UltimasConsultas_conAPI_adaptador.js"></script>
+</html>
