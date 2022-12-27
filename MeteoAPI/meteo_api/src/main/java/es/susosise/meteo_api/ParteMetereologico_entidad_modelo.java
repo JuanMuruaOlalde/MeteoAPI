@@ -4,6 +4,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
 import jakarta.persistence.Id;
 
+import java.util.ArrayList;
 import java.util.Date;
 
 import jakarta.persistence.GeneratedValue;
@@ -34,7 +35,11 @@ public class ParteMetereologico_entidad_modelo {
         vientoOrientacion_grados = 0;
     }
 
-    public ParteMetereologico_entidad_modelo(Long idInterno, String poblacion, String codigoPais, Date fecha, Double temperatura_celsius, Double humedad_porcentual, Double velocidadDelViento_ms, Integer orientacionDelViento_grados) {
+    public ParteMetereologico_entidad_modelo(Long idInterno, 
+      String poblacion, String codigoPais, 
+      Date fecha, 
+      Double temperatura_celsius, Double humedad_porcentual, 
+      Double velocidadDelViento_ms, Integer orientacionDelViento_grados) {
         this.idInterno = idInterno;
         this.poblacion = poblacion;
         this.codigoPais = codigoPais;
@@ -107,6 +112,20 @@ public class ParteMetereologico_entidad_modelo {
 
     public void setOrientacionDelViento_grados(Integer orientacionDelViento_grados) {
         this.vientoOrientacion_grados = orientacionDelViento_grados;
+    }
+
+    public static ArrayList<ParteMetereologico_entidad_modelo> getPartesParaPruebas() {
+        ArrayList<ParteMetereologico_entidad_modelo> partes = new ArrayList<>();
+        ParteMetereologico_entidad_modelo parte01 = new ParteMetereologico_entidad_modelo(1L, "Bilbao", "ES", new Date(), 18.3, 46.2, 3.9, 333);
+        partes.add(parte01);
+        ParteMetereologico_entidad_modelo parte02 = new ParteMetereologico_entidad_modelo(2L, "Santander", "ES", new Date(), 19.7, 45.2, 2.5, 333);
+        partes.add(parte02);
+        ParteMetereologico_entidad_modelo parte03 = new ParteMetereologico_entidad_modelo(3L, "Albacete", "ES", new Date(), 27.3, 21.8, 1.3, 125);
+        partes.add(parte03);
+        ParteMetereologico_entidad_modelo parte04 = new ParteMetereologico_entidad_modelo(4L, "Sevilla", "ES", new Date(), 31.7, 32.2, 2.5, 78);
+        partes.add(parte04);
+
+        return partes;
     }
 
 }

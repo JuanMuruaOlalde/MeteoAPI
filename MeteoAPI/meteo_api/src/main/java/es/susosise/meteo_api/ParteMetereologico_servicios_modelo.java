@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -24,6 +25,10 @@ public class ParteMetereologico_servicios_modelo {
     @Autowired
     MisPropiedades mispropiedades;
 
+    public ParteMetereologico_servicios_modelo(ParteMetereologico_persistencia_adaptador persistencia) {
+        this.persistencia = persistencia;
+    }
+
     public ParteMetereologico_dto_adaptador ObtenerDatosMetereologicos(String poblacion, String codigoPais) throws IOException, JSONException {
         Coordenadas_dto_adaptador coordenadas = getGeolocalizacion(poblacion, codigoPais);
         if (coordenadas != null) {
@@ -34,11 +39,15 @@ public class ParteMetereologico_servicios_modelo {
         //return getMetereologia(getGeolocalizacion(poblacion, codigoPais));
     }
     
-    public ParteMetereologico_servicios_modelo(ParteMetereologico_persistencia_adaptador persistencia) {
-        this.persistencia = persistencia;
+    public ArrayList<ParteMetereologico_entidad_modelo> getLos10Ultimos() {
+        ArrayList<ParteMetereologico_entidad_modelo> partes = (ArrayList<ParteMetereologico_entidad_modelo>) persistencia.findTop10ByOrderByFechaDesc();
+        if (partes.size() == 0) {
+            partes = ParteMetereologico_entidad_modelo.getPartesParaPruebas();
+        }
+        return partes;
     }
     
-    public Long getCuantasHay() {
+    public Long getCuantosHayAlmacenados() {
         return persistencia.count();
     }
     
