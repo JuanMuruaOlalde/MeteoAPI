@@ -1,6 +1,7 @@
 package es.susosise.meteo_api;
 
 import java.io.IOException;
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,7 +19,8 @@ public class EndpointsAPI_adaptador {
 
     @GetMapping("/meteo")
     public ParteMetereologico_dto_adaptador obtenerDatosMetereologicos(@PathParam("poblacion") String poblacion,
-            @PathParam("codigoPais") String codigoPais) throws IOException, JSONException {
+            @PathParam("codigoPais") String codigoPais)
+            throws IOException, JSONException, URISyntaxException, InterruptedException {
         return servicios.ObtenerDatosMetereologicos(poblacion, codigoPais);
     }
 

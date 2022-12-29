@@ -4,12 +4,19 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
+import java.net.URISyntaxException;
 import java.net.URL;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
+import java.net.http.HttpResponse.BodyHandlers;
+import java.text.StringCharacterIterator;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
+import org.hibernate.type.jakartajson.JsonBJsonFormatMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.configurationprocessor.json.JSONArray;
 import org.springframework.boot.configurationprocessor.json.JSONException;
@@ -31,7 +38,7 @@ public class ParteMetereologico_servicios_modelo {
     }
 
     public ParteMetereologico_dto_adaptador ObtenerDatosMetereologicos(String poblacion, String codigoPais)
-            throws IOException, JSONException {
+            throws IOException, JSONException, URISyntaxException, InterruptedException {
         Coordenadas_dto_adaptador coordenadas = getGeolocalizacion(poblacion, codigoPais);
         if (coordenadas != null) {
             ParteMetereologico_dto_adaptador parteMetereologico = getMetereologia(coordenadas);
@@ -85,13 +92,13 @@ public class ParteMetereologico_servicios_modelo {
     }
 
     private Coordenadas_dto_adaptador getGeolocalizacion(String poblacion, String codigoPais)
-            throws IOException, JSONException {
+            throws IOException, JSONException, URISyntaxException, InterruptedException {
         // nota: Utiliza un servicio de OpenWeather
         // https://openweathermap.org/api/geocoding-api
         URL urlGeolocalizacion = new URL("http://api.openweathermap.org/geo/1.0/direct"
                 + "?q=" + poblacion + "," + codigoPais
                 + "&appid=" + mispropiedades.getWeatherAPIkey());
-        String datosTexto = llamarALaApiYObtenerRespuesta(urlGeolocalizacion);
+        String datosTexto = llamarALaApiYObtenerRespuesta_deLaFormaModerna(urlGeolocalizacion);
         JSONArray datos = (JSONArray) new JSONTokener(datosTexto).nextValue();
         JSONObject datosJson = datos.getJSONObject(0);
         String latitud = datosJson.getString("lat");
@@ -100,7 +107,7 @@ public class ParteMetereologico_servicios_modelo {
     }
 
     private ParteMetereologico_dto_adaptador getMetereologia(Coordenadas_dto_adaptador coordenadas)
-            throws IOException, JSONException {
+            throws IOException, JSONException, URISyntaxException, InterruptedException {
         // nota: Utiliza un servicio de OpenWeather
         // https://openweathermap.org/current
         URL urlMetereologia = new URL("https://api.openweathermap.org/data/2.5/weather"
@@ -109,7 +116,7 @@ public class ParteMetereologico_servicios_modelo {
                 + "&units=metric"
                 + "&lang=es"
                 + "&appid=" + mispropiedades.getWeatherAPIkey());
-        String datosTexto = llamarALaApiYObtenerRespuesta(urlMetereologia);
+        String datosTexto = llamarALaApiYObtenerRespuesta_deLaFormaModerna(urlMetereologia);
         // JSONArray datos = (JSONArray) new JSONTokener(datosTexto).nextValue();
         JSONObject datosJson = (JSONObject) new JSONTokener(datosTexto).nextValue();
         Double temperaturaActual = datosJson.getJSONObject("main").getDouble("temp");
@@ -119,7 +126,7 @@ public class ParteMetereologico_servicios_modelo {
         return new ParteMetereologico_dto_adaptador(temperaturaActual, humedadActual, vientoVelocidad, vientoDireccion);
     }
 
-    private String llamarALaApiYObtenerRespuesta(URL url) throws IOException {
+    private String llamarALaApiYObtenerRespuesta_deLaFormaUniversal(URL url) throws IOException {
         HttpURLConnection conexion = (HttpURLConnection) url.openConnection();
         conexion.setRequestMethod("GET");
         conexion.setConnectTimeout(3000);
@@ -146,6 +153,16 @@ public class ParteMetereologico_servicios_modelo {
             conexion.disconnect();
             return respuestaOk.toString();
         }
+    }
+
+    private String llamarALaApiYObtenerRespuesta_deLaFormaModerna(URL url)
+            throws IOException, URISyntaxException, InterruptedException {
+        HttpClient cliente = HttpClient.newHttpClient();
+        HttpRequest peticion = HttpRequest.newBuilder(url.toURI())
+                .header("accept", "application/json")
+                .build();
+        HttpResponse<String> respuesta = cliente.send(peticion, BodyHandlers.ofString());
+        return respuesta.body();
     }
 
 }
