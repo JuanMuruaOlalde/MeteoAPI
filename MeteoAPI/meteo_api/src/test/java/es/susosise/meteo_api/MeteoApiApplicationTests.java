@@ -12,17 +12,17 @@ import org.springframework.boot.test.context.SpringBootTest;
 class MeteoApiApplicationTests {
 
 	@Autowired
-	ParteMetereologico_servicios_modelo servicios;
+	ParteMetereologico_servicios servicios;
 
 	@Test
 	void tenemosPartesMetereologicosParaPruebas() {
-		ArrayList<ParteMetereologico_entidad_modelo> partes = ParteMetereologico_entidad_modelo.getPartesParaPruebas();
+		ArrayList<ParteMetereologico_entidad> partes = ParteMetereologico_entidad.getPartesParaPruebas();
 		assertTrue(partes.size() > 0);
 	}
 
 	@Test
 	void laListaDePartesRecientesDevuelveSiempreAlgo_AlMenosLosDePrueba() {
-		ArrayList<ParteMetereologico_entidad_modelo> partes = servicios.getLos10Ultimos();
+		ArrayList<ParteMetereologico_entidad> partes = servicios.getLos10Ultimos();
 		assertTrue(partes.size() > 0);
 	}
 

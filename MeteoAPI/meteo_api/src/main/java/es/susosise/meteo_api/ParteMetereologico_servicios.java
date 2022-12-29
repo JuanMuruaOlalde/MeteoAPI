@@ -25,26 +25,26 @@ import org.springframework.boot.configurationprocessor.json.JSONTokener;
 import org.springframework.stereotype.Service;
 
 @Service
-public class ParteMetereologico_servicios_modelo {
+public class ParteMetereologico_servicios {
 
     @Autowired
-    ParteMetereologico_persistencia_adaptador persistencia;
+    ParteMetereologico_persistencia persistencia;
 
     @Autowired
     MisPropiedades mispropiedades;
 
-    public ParteMetereologico_servicios_modelo(ParteMetereologico_persistencia_adaptador persistencia) {
+    public ParteMetereologico_servicios(ParteMetereologico_persistencia persistencia) {
         this.persistencia = persistencia;
     }
 
-    public ParteMetereologico_dto_adaptador ObtenerDatosMetereologicos(String poblacion, String codigoPais)
+    public ParteMetereologico_dto ObtenerDatosMetereologicos(String poblacion, String codigoPais)
             throws IOException, JSONException, URISyntaxException, InterruptedException {
-        Coordenadas_dto_adaptador coordenadas = getGeolocalizacion(poblacion, codigoPais);
+        Coordenadas_dto coordenadas = getGeolocalizacion(poblacion, codigoPais);
         if (coordenadas != null) {
-            ParteMetereologico_dto_adaptador parteMetereologico = getMetereologia(coordenadas);
+            ParteMetereologico_dto parteMetereologico = getMetereologia(coordenadas);
             parteMetereologico.setFecha(new Date());
             parteMetereologico.setUbicacion(poblacion + " , " + codigoPais);
-            ParteMetereologico_entidad_modelo paraGuardar = new ParteMetereologico_entidad_modelo();
+            ParteMetereologico_entidad paraGuardar = new ParteMetereologico_entidad();
             paraGuardar.setPoblacion(poblacion);
             paraGuardar.setCodigoPais(codigoPais);
             paraGuardar.setTemperatura_celsius(parteMetereologico.getTemperatura_celsius());
@@ -57,11 +57,11 @@ public class ParteMetereologico_servicios_modelo {
         return null;
     }
 
-    public ArrayList<ParteMetereologico_entidad_modelo> getLos10Ultimos() {
-        ArrayList<ParteMetereologico_entidad_modelo> partes = (ArrayList<ParteMetereologico_entidad_modelo>) persistencia
+    public ArrayList<ParteMetereologico_entidad> getLos10Ultimos() {
+        ArrayList<ParteMetereologico_entidad> partes = (ArrayList<ParteMetereologico_entidad>) persistencia
                 .findTop10ByOrderByFechaDesc();
         if (partes.size() == 0) {
-            partes = ParteMetereologico_entidad_modelo.getPartesParaPruebas();
+            partes = ParteMetereologico_entidad.getPartesParaPruebas();
         }
         return partes;
     }
@@ -70,28 +70,28 @@ public class ParteMetereologico_servicios_modelo {
         return persistencia.count();
     }
 
-    public List<ParteMetereologico_entidad_modelo> getTodas() {
+    public List<ParteMetereologico_entidad> getTodas() {
         return persistencia.findAll();
     }
 
     public Object buscarPorIdentificador(Long idInterno) {
-        Optional<ParteMetereologico_entidad_modelo> parteMeteorologico = persistencia.findById(idInterno);
+        Optional<ParteMetereologico_entidad> parteMeteorologico = persistencia.findById(idInterno);
         if (parteMeteorologico.isPresent()) {
             return parteMeteorologico.get();
         } else {
-            return new ParteMetereologico_entidad_modelo();
+            return new ParteMetereologico_entidad();
         }
     }
 
-    public void guardar(ParteMetereologico_entidad_modelo parteMeteorologico) {
+    public void guardar(ParteMetereologico_entidad parteMeteorologico) {
         persistencia.save(parteMeteorologico);
     }
 
-    public void eliminar(ParteMetereologico_entidad_modelo parteMeteorologico) {
+    public void eliminar(ParteMetereologico_entidad parteMeteorologico) {
         persistencia.delete(parteMeteorologico);
     }
 
-    private Coordenadas_dto_adaptador getGeolocalizacion(String poblacion, String codigoPais)
+    private Coordenadas_dto getGeolocalizacion(String poblacion, String codigoPais)
             throws IOException, JSONException, URISyntaxException, InterruptedException {
         // nota: Utiliza un servicio de OpenWeather
         // https://openweathermap.org/api/geocoding-api
@@ -103,10 +103,10 @@ public class ParteMetereologico_servicios_modelo {
         JSONObject datosJson = datos.getJSONObject(0);
         String latitud = datosJson.getString("lat");
         String longitud = datosJson.getString("lon");
-        return new Coordenadas_dto_adaptador(latitud, longitud);
+        return new Coordenadas_dto(latitud, longitud);
     }
 
-    private ParteMetereologico_dto_adaptador getMetereologia(Coordenadas_dto_adaptador coordenadas)
+    private ParteMetereologico_dto getMetereologia(Coordenadas_dto coordenadas)
             throws IOException, JSONException, URISyntaxException, InterruptedException {
         // nota: Utiliza un servicio de OpenWeather
         // https://openweathermap.org/current
@@ -123,7 +123,7 @@ public class ParteMetereologico_servicios_modelo {
         Double humedadActual = datosJson.getJSONObject("main").getDouble("humidity");
         double vientoVelocidad = datosJson.getJSONObject("wind").getDouble("speed");
         Integer vientoDireccion = datosJson.getJSONObject("wind").getInt("deg");
-        return new ParteMetereologico_dto_adaptador(temperaturaActual, humedadActual, vientoVelocidad, vientoDireccion);
+        return new ParteMetereologico_dto(temperaturaActual, humedadActual, vientoVelocidad, vientoDireccion);
     }
 
     private String llamarALaApiYObtenerRespuesta_deLaFormaUniversal(URL url) throws IOException {

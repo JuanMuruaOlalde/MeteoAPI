@@ -13,52 +13,52 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.ui.Model;
 
 @Controller
-public class EndpointsApp_adaptador {
+public class EndpointsApp {
 
     @Autowired
-    ParteMetereologico_servicios_modelo servicios;
+    ParteMetereologico_servicios servicios;
 
     @GetMapping("/")
     public String MostrarLaPaginaInicial() {
-        return "InterfazUsuarioGUI_conAPI_infraestructura";
+        return "PaginaPrincipal_conAPI";
     }
 
     @GetMapping("/ultimasConsultas-conApi")
     public String mostrarUltimasConsultas() {
-        return "UltimasConsultas_conAPI_infraestructura";
+        return "UltimasConsultas_conAPI";
     }
 
     @GetMapping("/PaginaCompleta")
     public String MostrarPaginaInicial(Model model) {
-        Poblacion_dto_adaptador unaPoblacion = new Poblacion_dto_adaptador("", "es");
+        Poblacion_dto unaPoblacion = new Poblacion_dto("", "es");
         model.addAttribute("poblacionAConsultar", unaPoblacion);
-        return "InterfazUsuarioGUI_conPaginaCompleta_infraestructura";
+        return "PaginaPrincipal_conPaginaCompleta";
     }
 
     @PostMapping("/PaginaCompleta")
     public String ProcesarAccionesDeLaPaginaInicial(String action,
-            @ModelAttribute("poblacionAConsultar") Poblacion_dto_adaptador poblacionAConsultar, Model model)
+            @ModelAttribute("poblacionAConsultar") Poblacion_dto poblacionAConsultar, Model model)
             throws IOException, JSONException, URISyntaxException, InterruptedException {
-        ParteMetereologico_dto_adaptador parte = servicios
+        ParteMetereologico_dto parte = servicios
                 .ObtenerDatosMetereologicos(poblacionAConsultar.getPoblacion(), poblacionAConsultar.getCodigoPais());
         model.addAttribute("temperatura_celsius", parte.temperatura_celsius);
         model.addAttribute("humedad_porcentual", parte.humedad_porcentual);
         model.addAttribute("velocidadDelViento_ms", parte.velocidadDelViento_ms);
         model.addAttribute("orientacionDelViento_grados", parte.orientacionDelViento_grados);
-        return "InterfazUsuarioGUI_conPaginaCompleta_infraestructura";
+        return "PaginaPrincipal_conPaginaCompleta";
     }
 
     @GetMapping("/ultimasConsultas-conPaginaCompleta")
     public String mostrarUltimasConsultas(Model model) {
-        ArrayList<ParteMetereologico_dto_adaptador> resultados = new ArrayList<>();
-        ArrayList<ParteMetereologico_entidad_modelo> partes = servicios.getLos10Ultimos();
-        for (ParteMetereologico_entidad_modelo parte : partes) {
-            resultados.add(new ParteMetereologico_dto_adaptador(parte.poblacion + " , " + parte.codigoPais,
+        ArrayList<ParteMetereologico_dto> resultados = new ArrayList<>();
+        ArrayList<ParteMetereologico_entidad> partes = servicios.getLos10Ultimos();
+        for (ParteMetereologico_entidad parte : partes) {
+            resultados.add(new ParteMetereologico_dto(parte.poblacion + " , " + parte.codigoPais,
                     parte.fecha, parte.temperatura_celsius, parte.humedad_porcentual, parte.vientoVelocidad_ms,
                     parte.vientoOrientacion_grados));
         }
         model.addAttribute("ultimosPartesConsultados", resultados);
-        return "UltimasConsultas_conPaginaCompleta_infraestructura";
+        return "UltimasConsultas_conPaginaCompleta";
     }
 
 }

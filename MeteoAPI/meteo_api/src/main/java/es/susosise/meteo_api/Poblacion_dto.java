@@ -1,14 +1,13 @@
 package es.susosise.meteo_api;
 
-public class Poblacion_dto_adaptador {
+public class Poblacion_dto {
     private String poblacion;
     private String codigoPais;
 
-
-    public Poblacion_dto_adaptador() {
+    public Poblacion_dto() {
     }
 
-    public Poblacion_dto_adaptador(String poblacion, String codigoPais) {
+    public Poblacion_dto(String poblacion, String codigoPais) {
         this.poblacion = poblacion;
         this.codigoPais = codigoPais;
     }

@@ -2,7 +2,7 @@ package es.susosise.meteo_api;
 
 import java.util.Date;
 
-public class ParteMetereologico_dto_adaptador {
+public class ParteMetereologico_dto {
     String ubicacion;
     Date fecha;
     Double temperatura_celsius;
@@ -10,12 +10,11 @@ public class ParteMetereologico_dto_adaptador {
     Double velocidadDelViento_ms;
     Integer orientacionDelViento_grados;
 
-
-    public ParteMetereologico_dto_adaptador() {
+    public ParteMetereologico_dto() {
     }
 
-
-    public ParteMetereologico_dto_adaptador(String ubicacion, Date fecha, Double temperatura_celsius, Double humedad_porcentual, Double velocidadDelViento_ms, Integer orientacionDelViento_grados) {
+    public ParteMetereologico_dto(String ubicacion, Date fecha, Double temperatura_celsius, Double humedad_porcentual,
+            Double velocidadDelViento_ms, Integer orientacionDelViento_grados) {
         this.ubicacion = ubicacion;
         this.fecha = fecha;
         this.temperatura_celsius = temperatura_celsius;
@@ -24,7 +23,8 @@ public class ParteMetereologico_dto_adaptador {
         this.orientacionDelViento_grados = orientacionDelViento_grados;
     }
 
-    public ParteMetereologico_dto_adaptador(Double temperatura_celsius, Double humedad_porcentual, Double velocidadDelViento_ms, Integer orientacionDelViento_grados) {
+    public ParteMetereologico_dto(Double temperatura_celsius, Double humedad_porcentual, Double velocidadDelViento_ms,
+            Integer orientacionDelViento_grados) {
         this.temperatura_celsius = temperatura_celsius;
         this.humedad_porcentual = humedad_porcentual;
         this.velocidadDelViento_ms = velocidadDelViento_ms;
@@ -78,5 +78,5 @@ public class ParteMetereologico_dto_adaptador {
     public void setOrientacionDelViento_grados(Integer orientacionDelViento_grados) {
         this.orientacionDelViento_grados = orientacionDelViento_grados;
     }
- 
+
 }

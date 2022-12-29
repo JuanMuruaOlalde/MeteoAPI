@@ -13,23 +13,23 @@ import jakarta.websocket.server.PathParam;
 import org.springframework.web.bind.annotation.GetMapping;
 
 @RestController
-public class EndpointsAPI_adaptador {
+public class EndpointsAPI {
     @Autowired
-    ParteMetereologico_servicios_modelo servicios;
+    ParteMetereologico_servicios servicios;
 
     @GetMapping("/meteo")
-    public ParteMetereologico_dto_adaptador obtenerDatosMetereologicos(@PathParam("poblacion") String poblacion,
+    public ParteMetereologico_dto obtenerDatosMetereologicos(@PathParam("poblacion") String poblacion,
             @PathParam("codigoPais") String codigoPais)
             throws IOException, JSONException, URISyntaxException, InterruptedException {
         return servicios.ObtenerDatosMetereologicos(poblacion, codigoPais);
     }
 
     @GetMapping("/meteo/ultimasConsultas")
-    public ArrayList<ParteMetereologico_dto_adaptador> obtenerDatosHistoricos() {
-        ArrayList<ParteMetereologico_dto_adaptador> resultados = new ArrayList<>();
-        ArrayList<ParteMetereologico_entidad_modelo> partes = servicios.getLos10Ultimos();
-        for (ParteMetereologico_entidad_modelo parte : partes) {
-            resultados.add(new ParteMetereologico_dto_adaptador(parte.poblacion + " , " + parte.codigoPais,
+    public ArrayList<ParteMetereologico_dto> obtenerDatosHistoricos() {
+        ArrayList<ParteMetereologico_dto> resultados = new ArrayList<>();
+        ArrayList<ParteMetereologico_entidad> partes = servicios.getLos10Ultimos();
+        for (ParteMetereologico_entidad parte : partes) {
+            resultados.add(new ParteMetereologico_dto(parte.poblacion + " , " + parte.codigoPais,
                     parte.fecha, parte.temperatura_celsius, parte.humedad_porcentual, parte.vientoVelocidad_ms,
                     parte.vientoOrientacion_grados));
         }
