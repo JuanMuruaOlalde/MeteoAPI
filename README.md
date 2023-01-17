@@ -1,9 +1,8 @@
-# Programacion-Java
 
-Son simplemente algunas muestras de código...\
-...que dejo aquí por si a alguien pudieran serle de alguna utilidad.
+Es simplemente una muestra de código...\
+...que dejo aquí por si a alguien pudiera serle de alguna utilidad.
 
-### MeteoAPI
+# MeteoAPI
 
 Intenta ilustrar la diferencia entre:
 - Servir páginas completas desde el servidor (Templates, @Controller)
@@ -11,17 +10,3 @@ Intenta ilustrar la diferencia entre:
 
 [![Esquema general de la arquitectura interna de MeteoAPI](/MeteoAPI/meteo_api/documentacion/Esquema_general_de_la_arquitectura_interna.drawio.png)](https://github.com/JuanMuruaOlalde/Programacion-Java/blob/main/MeteoAPI/meteo_api/documentacion/Esquema_general_de_la_arquitectura_interna.drawio.png)
 
-## Código en otros repositorios
-
-### MVC_springboot
-
-Una mini aplicación "web", con Spring Boot.
-
-(https://github.com/JuanMuruaOlalde/DesarrolloDeSoftware/tree/main/02-Mas_alla_del_IF_y_del_WHILE/soluciones_java/MVC_springboot)
-
-### Hotel
-
-Una aplicación "desktop", con JavaFX.\
-(nota: Está incabada, es un trabajo en curso..., que lo voy avanzando según puedo...)
-
-(https://github.com/JuanMuruaOlalde/Hotel)
